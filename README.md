@@ -127,7 +127,7 @@ OR
 
 ## **8. Legal information**
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">FizzingBrain</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="www.porkolab.digital" property="cc:attributionName" rel="cc:attributionURL">Dr. Ádám Porkoláb</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="www.github.com/APorkolab" rel="dct:source">www.github.com/APorkolab</a>.<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="www.aporkolab.com" rel="cc:morePermissions">www.aporkolab.com</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">FizzingBrain</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="www.aporkolab.com" property="cc:attributionName" rel="cc:attributionURL">Dr. Ádám Porkoláb</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="www.github.com/APorkolab" rel="dct:source">www.github.com/APorkolab</a>.<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="www.aporkolab.com" rel="cc:morePermissions">www.aporkolab.com</a>.
 
 ---
 
@@ -250,7 +250,6 @@ VAGY
 ## **5. Az alkalmazás indítása**
 
 - Mind a backend, mind a frontend az `npm start` paranccsal indítható.
-- A játék aktuális verziója a [https://fizzingbrain.porkolab.digital/] címen elérhető.
 
 ## **6. Az alkalmazás elindítása**
 
@@ -265,4 +264,4 @@ VAGY
 
 ## **8. Jogi információk**
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licenc" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br /><a xmlns:cc="http://creativecommons.org/ns#" href="porkolab.digital" property="cc:attributionName" rel="cc:attributionURL">Dr. Porkoláb Ádám</a> <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">FizzingBrain</span> című műve <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Nevezd meg! - Ne add el! 4.0 Nemzetközi Licenc</a> alatt van.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="www.github.com/APorkolab" rel="dct:source">www.github.com/APorkolab</a>.<br />Az ezen publikus licenc <strong>hatáskörén kívül eső</strong> jogok megtekinthetőek itt: <a xmlns:cc="http://creativecommons.org/ns#" href="www.porkolab.digital" rel="cc:morePermissions">www.porkolab.digital</a>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licenc" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br /><a xmlns:cc="http://creativecommons.org/ns#" href="aporkolab.com" property="cc:attributionName" rel="cc:attributionURL">Dr. Porkoláb Ádám</a> <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">FizzingBrain</span> című műve <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Nevezd meg! - Ne add el! 4.0 Nemzetközi Licenc</a> alatt van.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="www.github.com/APorkolab" rel="dct:source">www.github.com/APorkolab</a>.<br />Az ezen publikus licenc <strong>hatáskörén kívül eső</strong> jogok megtekinthetőek itt: <a xmlns:cc="http://creativecommons.org/ns#" href="www.aporkolab.com" rel="cc:morePermissions">www.aporkolab.com</a>
