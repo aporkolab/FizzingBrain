@@ -2,7 +2,7 @@
   "name": "fizzing-brain",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://fizzingbrain.porkolab.hu",
+  "homepage": "https://fizzingbrain.aporkolab.com",
   "scripts": {
     "ng": "ng",
     "start": "npx serve -s dist/fizzing-brain",
