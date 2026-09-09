@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { ToastService, ToastOptions } from '../service/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class NotificationService {
 
-  constructor(private toastr: ToastrService, private translate: TranslateService) { }
+  constructor(private toastr: ToastService, private translate: TranslateService) { }
 
   showSuccess(message: string, title: string) {
     this.translate.get([message, title]).subscribe(translations => {

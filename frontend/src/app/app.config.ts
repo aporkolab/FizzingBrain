@@ -15,7 +15,6 @@ import {
   TRANSLATE_HTTP_LOADER_CONFIG,
   TranslateHttpLoader,
 } from '@ngx-translate/http-loader';
-import { ToastrModule } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { jwtInterceptor } from './service/jwt.interceptor';
 
@@ -48,13 +47,6 @@ export const appConfig: ApplicationConfig = {
           provide: TranslateLoader,
           useFactory: httpLoaderFactory,
         },
-      }),
-      ToastrModule.forRoot({
-        positionClass: 'toast-top-center',
-        closeButton: true,
-        preventDuplicates: true,
-        timeOut: 5000,
-        extendedTimeOut: 3000,
       }),
     ),
 
