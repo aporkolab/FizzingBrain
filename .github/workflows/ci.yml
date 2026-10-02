@@ -1,0 +1,35 @@
+name: Dependency validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dependency-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [backend, frontend]
+    defaults:
+      run:
+        working-directory: ${{ matrix.component }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: ${{ matrix.component }}/package-lock.json
+      - run: npm ci
+      - if: matrix.component == 'backend'
+        run: npm test -- --runInBand
+      - if: matrix.component == 'frontend'
+        run: npm run build
