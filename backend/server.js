@@ -1,6 +1,5 @@
 const express = require('express');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const logger = require('./logger/logger');
 
@@ -16,14 +15,16 @@ app.use(morgan('combined', {
 	}
 }));
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
-app.use(bodyParser.json());
+app.use(express.json());
 
 const authenticateJwt = require('./model/auth/authenticate');
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./swagger.yaml');
+const fs = require('fs');
+const path = require('path');
+const YAML = require('yaml');
+const swaggerDocument = YAML.parse(fs.readFileSync(path.join(__dirname, 'swagger.yaml'), 'utf8'));
 
 // API Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
