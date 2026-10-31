@@ -36,7 +36,7 @@
 <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-3 tm-border-rounded" *ngIf="gameHasEnded">
 	<div class="tm-about-header tm-flex-center">
 		<h1>{{ 'FIZZINGBRAIN.THEEND' | translate }}</h1>
-		<h1>{{ 'FIZZINGBRAIN.WINNER' | translate }} '{{winner}}'.</h1>
+		<h1>{{ 'FIZZINGBRAIN.WINNER' | translate }} '{{ winner | translate }}'.</h1>
 		<h2>{{ 'FIZZINGBRAIN.PLAYERRES' | translate }} {{playerPoint}} {{ 'FIZZINGBRAIN.COMPRES' | translate }}
 			{{computerPoint}} {{ 'FIZZINGBRAIN.POINT' | translate }}</h2>
 		<div class="tm-mb-0">
@@ -57,8 +57,8 @@
 	*ngIf="gameDifficulty !== '' && !gameHasEnded && gameHasStarted">
 	<div class="tm-about-header tm-flex-center">
 		<i-feather name="home"></i-feather>
-		<h2 *ngIf="language === 'hu'">{{questions[counter].hungarianQuestion}}</h2>
-		<h2 *ngIf="language === 'en'">{{questions[counter].englishQuestion}}</h2>
+		<h2 *ngIf="language() === 'hu'">{{questions[counter]?.hungarianQuestion}}</h2>
+		<h2 *ngIf="language() !== 'hu'">{{questions[counter]?.englishQuestion}}</h2>
 	</div>
 </section>
 
