@@ -1,66 +1,47 @@
 const express = require('express');
-const router = express.Router();
-const {
-	User
-} = require('../../model'); // Helyes modell importálása
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const asyncHandler = require('express-async-handler');
+const { User } = require('../../model');
+const config = require('../../config');
 
-// Bejelentkezés
-router.post('/', async (req, res) => { // Itt nincs '/login' az útvonalban
-	const {
-		email,
-		password
-	} = req.body;
+const router = express.Router();
 
-	try {
-		const user = await User.findOne({
-			where: {
-				email
-			}
-		});
+const invalidCredentials = (res) => res.status(401).json({
+	error: [{
+		msg: 'Invalid credentials'
+	}]
+});
 
-		if (!user) {
-			return res.status(400).json({
-				error: [{
-					msg: "Bad credentials"
-				}]
-			});
-		}
-
-		const valid = await bcrypt.compare(password, user.password);
-		if (!valid) {
-			return res.status(401).json({
-				error: [{
-					msg: "Unauthorized user"
-				}]
-			});
-		}
-
-		const accessToken = jwt.sign({
-				email: user.email
-			},
-			'AtMySignalUnleashHell', // Használj erősebb titkosítási kulcsot éles környezetben!
-			{
-				expiresIn: '1h'
-			}
-		);
-
-		res.json({
-			success: true,
-			accessToken,
-			user: {
-				email: user.email
-			}
-		});
-	} catch (error) {
-		console.error('Server error:', error);
-		return res.status(500).json({
+router.post('/', asyncHandler(async (req, res) => {
+	const { email, password } = req.body || {};
+	if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
+		return res.status(400).json({
 			error: [{
-				msg: "Server error"
+				msg: 'Email and password are required'
 			}]
 		});
 	}
-});
+
+	const user = await User.findOne({ where: { email } });
+	// Same answer for an unknown e-mail and a wrong password: no account enumeration.
+	if (!user || !(await user.validPassword(password))) {
+		return invalidCredentials(res);
+	}
+
+	const accessToken = jwt.sign({ id: user.id, email: user.email }, config.jwt.secret, {
+		expiresIn: config.jwt.expiresIn,
+	});
+
+	res.json({
+		success: true,
+		accessToken,
+		user: {
+			id: user.id,
+			email: user.email,
+			firstName: user.firstName,
+			lastName: user.lastName,
+		}
+	});
+}));
 
 module.exports = router;

@@ -1,135 +1,221 @@
-<section *ngIf="!gameHasStarted" class="tm-site-header tm-flex-center tm-mb-50 tm-bgcolor-1 tm-border-rounded">
-	<img src="../../../assets/img/FizzingBrain.png" class="img-fluid" alt="logo">
-	<h1>FizzingBrain v.1.0.0</h1>
-	<table class="table table-borderless py-5">
-		<tbody>
-			<tr>
-				<td class="tg-0pky">
-					<select #difficulties (change)="setDifficulty(difficulties.value)" name="diff"
-						class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="difficulties">
-						<option value="easy" selected>{{ 'FIZZINGBRAIN.BUTTONTITLE' | translate }}</option>
-						<option value="easy">{{ 'FIZZINGBRAIN.EASY' | translate }}</option>
-						<option value="medium">{{ 'FIZZINGBRAIN.MEDIUM' | translate }}</option>
-						<option value="hard">{{ 'FIZZINGBRAIN.HARD' | translate }}</option>
-						<option value="impossible">{{ 'FIZZINGBRAIN.IMPOSSIBLE' | translate }}</option>
-						<option value="random">{{ 'FIZZINGBRAIN.RANDOMLEVEL' | translate }}</option>
-					</select>
-				</td>
-				<td class="tg-0pky">
-					<button type="button" (click)="startGame()"
-						[ngClass]="gameDifficulty !== undefined ? 'btn btn-primary btn-lg ' : ' btn btn-primary btn-lg disabled'">
-						{{ 'FIZZINGBRAIN.STARTGAME' | translate }}
-					</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</section>
+@if (!gameHasStarted) {
+  <section
+    class="tm-site-header tm-flex-center tm-mb-50 tm-bgcolor-1 tm-border-rounded"
+  >
+    <img
+      src="../../../assets/img/FizzingBrain.png"
+      class="img-fluid"
+      alt="logo"
+    />
+    <h1>FizzingBrain v.1.0.0</h1>
+    <table class="table table-borderless py-5">
+      <tbody>
+        <tr>
+          <td class="tg-0pky">
+            <select
+              #difficulties
+              (change)="setDifficulty(difficulties.value)"
+              name="diff"
+              class="form-select form-select-lg mb-3"
+              aria-label=".form-select-lg example"
+              id="difficulties"
+            >
+              <option value="easy" selected>
+                {{ "FIZZINGBRAIN.BUTTONTITLE" | translate }}
+              </option>
+              <option value="easy">
+                {{ "FIZZINGBRAIN.EASY" | translate }}
+              </option>
+              <option value="medium">
+                {{ "FIZZINGBRAIN.MEDIUM" | translate }}
+              </option>
+              <option value="hard">
+                {{ "FIZZINGBRAIN.HARD" | translate }}
+              </option>
+              <option value="impossible">
+                {{ "FIZZINGBRAIN.IMPOSSIBLE" | translate }}
+              </option>
+              <option value="random">
+                {{ "FIZZINGBRAIN.RANDOMLEVEL" | translate }}
+              </option>
+            </select>
+          </td>
+          <td class="tg-0pky">
+            <button
+              type="button"
+              (click)="startGame()"
+              [ngClass]="
+                gameDifficulty !== undefined
+                  ? 'btn btn-primary btn-lg '
+                  : ' btn btn-primary btn-lg disabled'
+              "
+            >
+              {{ "FIZZINGBRAIN.STARTGAME" | translate }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+}
 
-<section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-3 tm-border-rounded"
-	*ngIf="(gameDifficulty == '' || gameDifficulty == undefined) && !gameHasEnded && !gameHasStarted">
-	<div class="tm-about-header tm-flex-center">
-		<h1>{{ 'FIZZINGBRAIN.PLEASECHOOSEDIFFICULTY' | translate }}</h1>
-	</div>
-</section>
+@if (
+  (gameDifficulty == "" || gameDifficulty == undefined) &&
+  !gameHasEnded &&
+  !gameHasStarted
+) {
+  <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-3 tm-border-rounded">
+    <div class="tm-about-header tm-flex-center">
+      <h1>{{ "FIZZINGBRAIN.PLEASECHOOSEDIFFICULTY" | translate }}</h1>
+    </div>
+  </section>
+}
 
-<section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-3 tm-border-rounded" *ngIf="gameHasEnded">
-	<div class="tm-about-header tm-flex-center">
-		<h1>{{ 'FIZZINGBRAIN.THEEND' | translate }}</h1>
-		<h1>{{ 'FIZZINGBRAIN.WINNER' | translate }} '{{winner}}'.</h1>
-		<h2>{{ 'FIZZINGBRAIN.PLAYERRES' | translate }} {{playerPoint}} {{ 'FIZZINGBRAIN.COMPRES' | translate }}
-			{{computerPoint}} {{ 'FIZZINGBRAIN.POINT' | translate }}</h2>
-		<div class="tm-mb-0">
-			<button type="button" class="btn btn-primary btn-lg" (click)="restartGame()">{{ 'FIZZINGBRAIN.RESTART' | translate
-				}}</button>
-		</div>
-	</div>
-</section>
+@if (gameHasEnded) {
+  <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-3 tm-border-rounded">
+    <div class="tm-about-header tm-flex-center">
+      <h1>{{ "FIZZINGBRAIN.THEEND" | translate }}</h1>
+      <h1>
+        {{ "FIZZINGBRAIN.WINNER" | translate }} '{{ winner | translate }}'.
+      </h1>
+      <h2>
+        {{ "FIZZINGBRAIN.PLAYERRES" | translate }} {{ playerPoint }}
+        {{ "FIZZINGBRAIN.COMPRES" | translate }} {{ computerPoint }}
+        {{ "FIZZINGBRAIN.POINT" | translate }}
+      </h2>
+      <div class="tm-mb-0">
+        <button
+          type="button"
+          class="btn btn-primary btn-lg"
+          (click)="restartGame()"
+        >
+          {{ "FIZZINGBRAIN.RESTART" | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+}
 
-<section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-3 tm-border-rounded"
-	*ngIf="gameDifficulty !== '' && !gameHasEnded && gameHasStarted">
-	<div class="tm-about-header tm-flex-center">
-		<h1>00:{{timeLeft | number:'2.0'}}</h1>
-	</div>
-</section>
+@if (gameDifficulty !== "" && !gameHasEnded && gameHasStarted) {
+  <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-3 tm-border-rounded">
+    <div class="tm-about-header tm-flex-center">
+      <h1>00:{{ timeLeft | number: "2.0" }}</h1>
+    </div>
+  </section>
+}
 
-<section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-1 tm-border-rounded"
-	*ngIf="gameDifficulty !== '' && !gameHasEnded && gameHasStarted">
-	<div class="tm-about-header tm-flex-center">
-		<i-feather name="home"></i-feather>
-		<h2 *ngIf="language === 'hu'">{{questions[counter].hungarianQuestion}}</h2>
-		<h2 *ngIf="language === 'en'">{{questions[counter].englishQuestion}}</h2>
-	</div>
-</section>
+@if (gameDifficulty !== "" && !gameHasEnded && gameHasStarted) {
+  <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-1 tm-border-rounded">
+    <div class="tm-about-header tm-flex-center">
+      <i-feather name="home"></i-feather>
+      @if (language() === "hu") {
+        <h2>{{ questions[counter]?.hungarianQuestion }}</h2>
+      }
+      @if (language() !== "hu") {
+        <h2>{{ questions[counter]?.englishQuestion }}</h2>
+      }
+    </div>
+  </section>
+}
 
-<section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-2 tm-border-rounded"
-	*ngIf="gameDifficulty !== '' && !gameHasEnded && gameHasStarted">
-	<div class="tm-about-header tm-flex-center mx-5">
-		<table class="table text-center">
-			<tbody>
-				<tr>
-					<td class="tg-0lax" colspan="3">
-						<i-feather name="tv"></i-feather>
-					</td>
-				</tr>
-				<tr>
-					<td class="tg-lboi">
-						<h4>{{ 'FIZZINGBRAIN.COMPGUESS' | translate }}</h4>
-						<h4 *ngIf="isRevealAnswer">{{computerGuess}}</h4>
-						<h4 *ngIf="!isRevealAnswer">{{ 'FIZZINGBRAIN.HIDDEN' | translate }}</h4>
-					</td>
-					<td class="tg-0pky">
-						<h4>{{ 'FIZZINGBRAIN.COMPPOINTS' | translate }} {{computerPoint}}</h4>
-					</td>
-					<td class="tg-0pky">
-						<div class="tm-mb-0">
-							<button type="button" class="btn btn-primary btn-lg" (click)="restartGame()">{{ 'FIZZINGBRAIN.RESTART' |
-								translate }}</button>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<div class="tm-about-header tm-flex-center tm-border-rounded">
-		<table class="table table-dark text-center table-borderless">
-			<tbody>
-				<tr>
-					<td colspan="3">
-						<i-feather name="smile"></i-feather>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						<h5>{{ 'FIZZINGBRAIN.PLAYERPOINTS' | translate }} {{playerPoint}}</h5>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						<div class="tm-mb-40">
-							<h5>{{ 'FIZZINGBRAIN.PLAYERGUESS' | translate }}</h5>
-							<form>
-								<input [(ngModel)]="playerGuess" *ngIf="thereIsTime" type="number" id="playerGuess" name="playerGuess"
-									required placeholder="{{ 'FIZZINGBRAIN.PLACEHOLDER' | translate }}">
-							</form>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						<div class="tm-mb-0">
-							<button *ngIf="playerGuess && thereIsTime && !isRevealAnswer" type="button" class="btn btn-primary btn-lg"
-								(click)="nextQuestion()">{{ 'FIZZINGBRAIN.NEXT' | translate }}</button>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</section>
+@if (gameDifficulty !== "" && !gameHasEnded && gameHasStarted) {
+  <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-2 tm-border-rounded">
+    <div class="tm-about-header tm-flex-center mx-5">
+      <table class="table text-center">
+        <tbody>
+          <tr>
+            <td class="tg-0lax" colspan="3">
+              <i-feather name="tv"></i-feather>
+            </td>
+          </tr>
+          <tr>
+            <td class="tg-lboi">
+              <h4>{{ "FIZZINGBRAIN.COMPGUESS" | translate }}</h4>
+              @if (isRevealAnswer) {
+                <h4>{{ computerGuess }}</h4>
+              }
+              @if (!isRevealAnswer) {
+                <h4>{{ "FIZZINGBRAIN.HIDDEN" | translate }}</h4>
+              }
+            </td>
+            <td class="tg-0pky">
+              <h4>
+                {{ "FIZZINGBRAIN.COMPPOINTS" | translate }} {{ computerPoint }}
+              </h4>
+            </td>
+            <td class="tg-0pky">
+              <div class="tm-mb-0">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-lg"
+                  (click)="restartGame()"
+                >
+                  {{ "FIZZINGBRAIN.RESTART" | translate }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tm-about-header tm-flex-center tm-border-rounded">
+      <table class="table table-dark text-center table-borderless">
+        <tbody>
+          <tr>
+            <td colspan="3">
+              <i-feather name="smile"></i-feather>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <h5>
+                {{ "FIZZINGBRAIN.PLAYERPOINTS" | translate }} {{ playerPoint }}
+              </h5>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <div class="tm-mb-40">
+                <h5>{{ "FIZZINGBRAIN.PLAYERGUESS" | translate }}</h5>
+                <form>
+                  @if (thereIsTime) {
+                    <input
+                      [(ngModel)]="playerGuess"
+                      type="number"
+                      id="playerGuess"
+                      name="playerGuess"
+                      required
+                      placeholder="{{ 'FIZZINGBRAIN.PLACEHOLDER' | translate }}"
+                    />
+                  }
+                </form>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <div class="tm-mb-0">
+                @if (playerGuess && thereIsTime && !isRevealAnswer) {
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg"
+                    (click)="nextQuestion()"
+                  >
+                    {{ "FIZZINGBRAIN.NEXT" | translate }}
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+}
 
 <footer class="tm-footer">
-	Copyright 2020 Nano Folio - Design: <a rel="sponsored" href="https://www.tooplate.com"
-		class="tm-link-gray">Tooplate</a>
+  Copyright 2020 Nano Folio - Design:
+  <a rel="sponsored" href="https://www.tooplate.com" class="tm-link-gray"
+    >Tooplate</a
+  >
 </footer>

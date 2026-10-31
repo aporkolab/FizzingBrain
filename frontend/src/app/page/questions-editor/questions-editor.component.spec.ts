@@ -1,3 +1,4 @@
+import { provideTestDefaults } from 'src/testing/test-providers';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QuestionsEditorComponent } from './questions-editor.component';
@@ -8,7 +9,8 @@ describe('QuestionsEditorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QuestionsEditorComponent ]
+      imports: [QuestionsEditorComponent],
+      providers: provideTestDefaults()
     })
     .compileComponents();
 

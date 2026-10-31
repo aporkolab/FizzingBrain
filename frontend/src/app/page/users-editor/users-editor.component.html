@@ -1,83 +1,149 @@
 <div class="row">
-	<div class="col-12 d-flex justify-content-center text-center">
-		<div class="card">
-			<div class="card-header card-header-primary">
-				<h4 class="card-title">{{ actionText }}</h4>
-			</div>
-			<div class="card-body">
-				<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-					<input type="hidden" formControlName="id">
+  <div class="col-12 d-flex justify-content-center text-center">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">{{ actionText }}</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <input type="hidden" formControlName="id" />
 
-					<h3 class="h5 text-secondary">{{ 'firstName' | translate }} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="firstName" required>
-							</div>
-							<div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched"
-								class="alert alert-danger" role="alert">
-								{{ 'firstNameValid' | translate }}:
-								<span *ngIf="userForm.get('firstName')?.errors?.['required']">{{ 'This field is required' }}</span>
-								<span *ngIf="userForm.get('firstName')?.errors?.['minlength']">Minimum length is 3</span>
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">{{ "firstName" | translate }} *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="firstName"
+                  required
+                />
+              </div>
+              @if (
+                userForm.get("firstName")?.invalid &&
+                userForm.get("firstName")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "firstNameValid" | translate }}:
+                  @if (userForm.get("firstName")?.errors?.["required"]) {
+                    <span>{{ "This field is required" }}</span>
+                  }
+                  @if (userForm.get("firstName")?.errors?.["minlength"]) {
+                    <span>Minimum length is 3</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{ 'lastName' | translate }} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="lastName" required>
-							</div>
-							<div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched"
-								class="alert alert-danger" role="alert">
-								{{ 'lastNameValid' | translate }}:
-								<span *ngIf="userForm.get('lastName')?.errors?.['required']">{{ 'This field is required' }}</span>
-								<span *ngIf="userForm.get('lastName')?.errors?.['minlength']">Minimum length is 3</span>
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">{{ "lastName" | translate }} *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="lastName"
+                  required
+                />
+              </div>
+              @if (
+                userForm.get("lastName")?.invalid &&
+                userForm.get("lastName")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "lastNameValid" | translate }}:
+                  @if (userForm.get("lastName")?.errors?.["required"]) {
+                    <span>{{ "This field is required" }}</span>
+                  }
+                  @if (userForm.get("lastName")?.errors?.["minlength"]) {
+                    <span>Minimum length is 3</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{ 'email' | translate }} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="email" class="form-control" formControlName="email" required>
-							</div>
-							<div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="alert alert-danger"
-								role="alert">
-								{{ 'emailValid' | translate }}:
-								<span *ngIf="userForm.get('email')?.errors?.['required']">{{ 'This field is required' }}</span>
-								<span *ngIf="userForm.get('email')?.errors?.['email']">Invalid email format</span>
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">{{ "email" | translate }} *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                  required
+                />
+              </div>
+              @if (
+                userForm.get("email")?.invalid && userForm.get("email")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "emailValid" | translate }}:
+                  @if (userForm.get("email")?.errors?.["required"]) {
+                    <span>{{ "This field is required" }}</span>
+                  }
+                  @if (userForm.get("email")?.errors?.["email"]) {
+                    <span>Invalid email format</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{ 'Password' | translate }} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="password" class="form-control" formControlName="password" required>
-							</div>
-							<div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched"
-								class="alert alert-danger" role="alert">
-								{{ 'passValid2' | translate }}:
-								<span *ngIf="userForm.get('password')?.errors?.['required']">{{ 'This field is required' }}</span>
-								<span *ngIf="userForm.get('password')?.errors?.['pattern']">Password must be at least 7 characters long
-									and contain both letters and numbers</span>
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">{{ "Password" | translate }} *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  required
+                />
+              </div>
+              @if (
+                userForm.get("password")?.invalid &&
+                userForm.get("password")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "passValid2" | translate }}:
+                  @if (userForm.get("password")?.errors?.["required"]) {
+                    <span>{{ "This field is required" }}</span>
+                  }
+                  @if (userForm.get("password")?.errors?.["pattern"]) {
+                    <span
+                      >Password must be at least 7 characters long and contain
+                      both letters and numbers</span
+                    >
+                  }
+                </div>
+              }
+            </div>
+          </div>
 
-					<button [disabled]="userForm.invalid" type="submit" class="btn btn-primary pull-right me-md-3">
-						{{ userForm.get('id')?.value ? ( 'updateUser' | translate ) : ( 'createUser' | translate ) }}
-					</button>
-					<button routerLink="/user" type="button" class="btn btn-danger pull-left">{{ 'cancelEdit' | translate
-						}}</button>
-					<div class="clearfix"></div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4"></div>
+          <button
+            [disabled]="userForm.invalid"
+            type="submit"
+            class="btn btn-primary pull-right me-md-3"
+          >
+            {{
+              userForm.get("id")?.value
+                ? ("updateUser" | translate)
+                : ("createUser" | translate)
+            }}
+          </button>
+          <button
+            routerLink="/user"
+            type="button"
+            class="btn btn-danger pull-left"
+          >
+            {{ "cancelEdit" | translate }}
+          </button>
+          <div class="clearfix"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
 </div>

@@ -1,3 +1,4 @@
+import { provideTestDefaults } from 'src/testing/test-providers';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RulesComponent } from './rules.component';
@@ -8,7 +9,8 @@ describe('RulesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RulesComponent ]
+      imports: [RulesComponent],
+      providers: provideTestDefaults()
     })
     .compileComponents();
 

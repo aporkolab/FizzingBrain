@@ -79,12 +79,19 @@
     "Login": "Login",
     "Logout": "Logout",
     "ANSWER": "The correct answer is",
-    "FIZZINGBRAIN_TITLE": "FizzingBrain v.1.0.0."
+    "FIZZINGBRAIN_TITLE": "FizzingBrain v.1.0.0.",
+    "CHOSEN_DIFFICULTY": "The computer has chosen the difficulty for you:",
+    "WINNER_BOTH": "both players",
+    "WINNER_COMPUTER": "Computer",
+    "WINNER_PLAYER": "Player",
+    "NOQUESTIONS": "No questions could be loaded. Please try again later.",
+    "QUESTIONERROR": "The current question could not be loaded.",
+    "INVALIDANSWER": "The answer of this question is not a number."
   },
   "HEADBAR": {
     "SELECT": "Please select the language of the application!"
   },
-    "header": {
+  "header": {
     "title": "FizzingBrain v.1.0.0"
   },
   "game": {

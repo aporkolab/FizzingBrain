@@ -1,28 +1,19 @@
 const { User } = require('../model');
-const { Op } = require('sequelize');
+const { buildSearchWhere } = require('../controller/base/search');
 
-const findAll = async (params = {}) => {
-  const searchParams = { ...params };
-  if (Object.keys(searchParams).length) {
-    Object.keys(searchParams).forEach(key => {
-      searchParams[key] = {
-        [Op.like]: `%${searchParams[key]}%`
-      };
-    });
-  }
-  return User.findAll({ where: searchParams });
-};
+const findAll = async (params = {}) => User.findAll({ where: buildSearchWhere(User, params) });
 
 const findById = (id) => User.findByPk(id);
 
 const create = (userData) => User.create(userData);
 
 const update = async (id, updateData) => {
-  const [updatedRows] = await User.update(updateData, { where: { id } });
+  // individualHooks runs the beforeUpdate hook, which hashes a changed password.
+  const [updatedRows] = await User.update(updateData, { where: { id }, individualHooks: true });
   if (updatedRows === 0) {
     throw new Error('Not found');
   }
-  return findById(id); // Return the updated user
+  return findById(id);
 };
 
 const deleteById = async (id) => {

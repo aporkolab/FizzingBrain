@@ -1,101 +1,66 @@
-const express = require('express');
 const createError = require('http-errors');
-const sequelizeService = require('./service');
 const asyncHandler = require('express-async-handler');
-const bcrypt = require('bcrypt');
+const sequelizeService = require('./service');
+
+const toHttpError = (err) => {
+	if (err.message === 'Not found') {
+		return new createError.NotFound('Entity not found');
+	}
+	if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
+		return new createError.BadRequest(err.errors?.map(e => e.message).join(', ') || err.message);
+	}
+	return err;
+};
 
 module.exports = (model, populateList = []) => {
 	const service = sequelizeService(model, populateList);
-	const hashPassword = async (user) => {
-		if (user.password) {
-			const salt = await bcrypt.genSalt(10);
-			user.password = await bcrypt.hash(user.password, salt);
+
+	const handle = (fn) => asyncHandler(async (req, res, next) => {
+		try {
+			await fn(req, res);
+		} catch (err) {
+			next(toHttpError(err));
 		}
-		return user;
-	};
+	});
 
 	return {
-		findAll: asyncHandler(async (req, res, next) => {
-			try {
-				const list = await service.findAll(req.query);
-				res.json(list);
-			} catch (err) {
-				next(new createError.InternalServerError(err.message));
-			}
+		findAll: handle(async (req, res) => {
+			res.json(await service.findAll(req.query));
 		}),
 
-		findOne: async (req, res, next) => {
-			try {
-				const entity = await service.findOne(req.params.id);
-				if (!entity) {
-					return next(new createError.NotFound("Entity not found"));
-				}
-				res.json(entity);
-			} catch (err) {
-				next(new createError.InternalServerError(err.message));
+		findOne: handle(async (req, res) => {
+			const entity = await service.findOne(req.params.id);
+			if (!entity) {
+				throw new Error('Not found');
 			}
-		},
+			res.json(entity);
+		}),
 
-		findRandom: async (req, res, next) => {
-			try {
-				const entities = await service.findRandom();
-				if (!entities || entities.length === 0) {
-					return next(new createError.NotFound("No entities found"));
-				}
-				res.json(entities);
-			} catch (err) {
-				next(new createError.InternalServerError(err.message));
+		findRandom: handle(async (req, res) => {
+			const entities = await service.findRandom();
+			if (!entities.length) {
+				throw new createError.NotFound('No entities found');
 			}
-		},
+			res.json(entities);
+		}),
 
-		replace: async (req, res, next) => {
-			try {
-				const user = await hashPassword(req.body);
-				const entity = await service.replace(req.params.id, user);
+		replace: handle(async (req, res) => {
+			res.json(await service.replace(req.params.id, req.body));
+		}),
 
-				if (!entity) {
-					return next(new createError.NotFound("Entity not found"));
-				}
-				res.json(entity);
-			} catch (err) {
-				next(new createError.InternalServerError(err.message));
-			}
-		},
+		update: handle(async (req, res) => {
+			res.json(await service.update(req.params.id, req.body));
+		}),
 
-		update: async (req, res, next) => {
-			try {
-				const user = await hashPassword(req.body);
-				const entity = await service.update(req.params.id, user);
+		create: handle(async (req, res) => {
+			res.status(201).json(await service.create(req.body));
+		}),
 
-				if (!entity) {
-					return next(new createError.NotFound("Entity not found"));
-				}
-				res.json(entity);
-			} catch (err) {
-				next(new createError.InternalServerError(err.message));
-			}
-		},
-
-		create: async (req, res, next) => {
-			try {
-				const user = await hashPassword(req.body);
-				const entity = await service.create(user);
-				res.status(201).json(entity);
-			} catch (err) {
-				next(new createError.InternalServerError(err.message));
-			}
-		},
-
-		delete: async (req, res, next) => {
-			try {
-				await service.delete(req.params.id);
-				res.status(204).json({});
-			} catch (err) {
-				if (err.message === "Not found") {
-					return next(new createError.NotFound(err.message));
-				}
-				next(new createError.InternalServerError(err.message));
-			}
-		}
+		delete: handle(async (req, res) => {
+			await service.delete(req.params.id);
+			res.status(204).end();
+		}),
 	};
 };
+
+module.exports.toHttpError = toHttpError;

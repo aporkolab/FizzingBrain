@@ -62,32 +62,35 @@
             class="form-select form-select-sm"
             (change)="translate.use(langSelect.value)"
           >
-            <option
-              *ngFor="let lang of translate.getLangs()"
-              [value]="lang"
-              [selected]="lang === translate.getCurrentLang()"
-            >
-              {{ lang }}
-            </option>
+            @for (lang of translate.getLangs(); track lang) {
+              <option
+                [value]="lang"
+                [selected]="lang === translate.getCurrentLang()"
+              >
+                {{ lang }}
+              </option>
+            }
           </select>
         </div>
         <div class="text-end">
-          <button
-            *ngIf="!(user$ | async)"
-            type="button"
-            class="btn btn-primary btn-sm me-2"
-            routerLink="/login"
-          >
-            {{ "FIZZINGBRAIN.Login" | translate }}
-          </button>
-          <button
-            *ngIf="user$ | async"
-            type="button"
-            class="btn btn-outline-secondary btn-sm"
-            (click)="logout()"
-          >
-            {{ "FIZZINGBRAIN.Logout" | translate }}
-          </button>
+          @if (!(user$ | async)) {
+            <button
+              type="button"
+              class="btn btn-primary btn-sm me-2"
+              routerLink="/login"
+            >
+              {{ "FIZZINGBRAIN.Login" | translate }}
+            </button>
+          }
+          @if (user$ | async) {
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="logout()"
+            >
+              {{ "FIZZINGBRAIN.Logout" | translate }}
+            </button>
+          }
         </div>
       </div>
     </div>

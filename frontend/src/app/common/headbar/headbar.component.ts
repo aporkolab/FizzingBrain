@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -18,20 +18,17 @@ import { FizzingbrainService } from 'src/app/service/fizzingbrain.service';
   ],
 })
 export class HeadbarComponent implements OnInit {
+  translate = inject(TranslateService);
+  protected data = inject(FizzingbrainService);
+  private auth = inject(AuthService);
+
   user$ = this.auth.user$;
   gameHasEnded!: boolean;
   gameHasEndedSubscription!: Subscription;
   gameHasStarted!: boolean;
   gameHasStartedSubscription!: Subscription;
 
-  constructor(
-    public translate: TranslateService,
-    protected data: FizzingbrainService,
-    private auth: AuthService,
-  ) {
-    this.user$.subscribe((user) => {
-      console.log('User observable changed:', user);
-    });
+  constructor() {
     this.translate.addLangs(['hu', 'en']);
   }
 
@@ -48,7 +45,6 @@ export class HeadbarComponent implements OnInit {
   }
 
   logout() {
-    console.log('Logging out...');
     this.auth.logout();
   }
 

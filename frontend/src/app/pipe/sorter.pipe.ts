@@ -8,7 +8,8 @@ export class SorterPipe implements PipeTransform {
     if (!Array.isArray(value) || !key) {
       return value;
     }
-    return value.sort((a, b) => {
+    // Sort a copy: a pure pipe must not reorder the caller's array in place.
+    return [...value].sort((a, b) => {
       let first = a[key];
       let second = b[key];
 

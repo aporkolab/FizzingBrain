@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../model/user';
 
@@ -16,87 +16,85 @@ export interface ILoginData {
   password: string;
 }
 
+export const SESSION_KEY = 'login';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  apiUrl: string = environment.apiUrl;
-  loginUrl: string = `${this.apiUrl}/login`;
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
-  user$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-  access_token$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  readonly apiUrl: string = environment.apiUrl;
+  readonly loginUrl: string = `${this.apiUrl}/login`;
+  readonly user$ = new BehaviorSubject<User | null>(null);
+  readonly access_token$ = new BehaviorSubject<string>('');
 
-  constructor(private http: HttpClient, private router: Router) {
-    const loginInfo = sessionStorage.getItem('login');
-    if (loginInfo) {
-      const loginObject = JSON.parse(loginInfo);
-      this.access_token$.next(loginObject.accessToken);
-      this.user$.next(loginObject.user);
+  constructor() {
+    const session = this.readSession();
+    if (session) {
+      this.access_token$.next(session.accessToken);
+      this.user$.next(session.user);
     }
-
-    this.user$.subscribe({
-      next: (user) => {
-        // console.log('AuthService user$ subscription:', user);
-        if (user) {
-          // console.log('User logged in, navigating to home');
-          this.router.navigate(['/']);
-        } else {
-          // console.log('User logged out');
-          this.access_token$.next('');
-          sessionStorage.removeItem('login');
-        }
-      },
-    });
   }
 
   login(loginData: ILoginData): void {
-    this.http.post<IAuthModel>(this.loginUrl, loginData)
-      .pipe(
-        catchError(this.handleError)
-      )
+    this.http
+      .post<IAuthModel>(this.loginUrl, loginData)
+      .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)))
       .subscribe({
-        next: (response: IAuthModel) => {
-          // console.log('Login response:', response);
+        next: (response) => {
           if (response.success) {
-            // console.log('Setting user in AuthService:', response.user);
-            this.user$.next(response.user); // Helyes kulcs használata
             this.access_token$.next(response.accessToken);
-            sessionStorage.setItem('login', JSON.stringify(response));
+            this.user$.next(response.user);
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(response));
             this.router.navigate(['/']);
           } else {
             this.handleLoginError('Login failed: Invalid credentials.');
           }
         },
-        error: (err) => {
-          this.handleLoginError('Login failed: ' + err.message);
-        }
+        error: (err: Error) => this.handleLoginError('Login failed: ' + err.message),
       });
   }
 
-
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Ismeretlen hiba történt!';
-    if (error.error instanceof ErrorEvent) {
-      // Kliens oldali hiba
-      errorMessage = `Hiba: ${error.error.message}`;
-    } else {
-      // Backend hiba
-      errorMessage = `${error.status}: ${error.error.message || error.statusText}`;
-    }
-    console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
+  logout(): void {
+    sessionStorage.removeItem(SESSION_KEY);
+    this.access_token$.next('');
+    this.user$.next(null);
   }
 
   handleLoginError(message: string): void {
     console.error(message);
-    alert(message);  // Vizuális hibajelzés a felhasználónak
+    alert(message);
     this.router.navigate(['/', 'login']);
   }
 
-  logout(): void {
-    // console.log('Logging out...');
-    sessionStorage.removeItem('login');
-    this.user$.next(null);
-    // console.log('User after logout:', this.user$.value);
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage: string;
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Hiba: ${error.error.message}`;
+    } else {
+      const backendMessage = error.error?.message ?? error.error?.error?.[0]?.msg;
+      errorMessage = `${error.status}: ${backendMessage || error.statusText}`;
+    }
+    return throwError(() => new Error(errorMessage));
+  }
+
+  /** A corrupted or foreign session entry must not break the application start. */
+  private readSession(): IAuthModel | null {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) {
+      return null;
+    }
+    try {
+      const session = JSON.parse(raw) as Partial<IAuthModel>;
+      if (typeof session.accessToken === 'string' && session.user) {
+        return session as IAuthModel;
+      }
+    } catch {
+      // fall through to the cleanup below
+    }
+    sessionStorage.removeItem(SESSION_KEY);
+    return null;
   }
 }

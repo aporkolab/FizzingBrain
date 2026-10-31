@@ -1,20 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ConfigService } from './config.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BaseService<
-  T extends { id: string | number;[key: string]: any }
+  T extends { id: string | number; [key: string]: any },
 > {
+  private readonly http = inject(HttpClient);
+
   apiUrl: string = environment.apiUrl;
   entity: string = '';
-  list$: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
-
-  constructor(private http: HttpClient, public config: ConfigService) { }
 
   getAll(): Observable<T[]> {
     return this.http.get<T[]>(`${this.apiUrl}/${this.entity}`);
@@ -36,7 +34,7 @@ export class BaseService<
   update(entity: T): Observable<T> {
     return this.http.patch<T>(
       `${this.apiUrl}/${this.entity}/${entity.id}`,
-      entity
+      entity,
     );
   }
 

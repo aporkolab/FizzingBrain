@@ -1,103 +1,174 @@
 <div class="row">
-	<div class="col-12 d-flex justify-content-center text-center">
-		<div class="card">
-			<div class="card-header card-header-primary">
-				<h4 class="card-title" *ngIf="questionForm.get('id')?.value">{{'editquestion'|translate}}</h4>
-				<h4 class="card-title" *ngIf="!questionForm.get('id')?.value">{{'addNewEntry'|translate}}</h4>
-			</div>
-			<div class="card-body">
-				<form [formGroup]="questionForm" (ngSubmit)="questionForm.get('id')?.value ? onUpdate() : onCreate()">
-					<input type="hidden" formControlName="id">
-					<h3 class="h5 text-secondary">{{'Hungarian'|translate}}*</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="hungarianQuestion" required>
-							</div>
-							<div
-								*ngIf="questionForm.get('hungarianQuestion')?.invalid && questionForm.get('hungarianQuestion')?.touched"
-								class="alert alert-danger" role="alert">
-								{{'hungarianValid'|translate}}
-							</div>
-						</div>
-					</div>
+  <div class="col-12 d-flex justify-content-center text-center">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        @if (questionForm.get("id")?.value) {
+          <h4 class="card-title">{{ "editquestion" | translate }}</h4>
+        }
+        @if (!questionForm.get("id")?.value) {
+          <h4 class="card-title">{{ "addNewEntry" | translate }}</h4>
+        }
+      </div>
+      <div class="card-body">
+        <form
+          [formGroup]="questionForm"
+          (ngSubmit)="questionForm.get('id')?.value ? onUpdate() : onCreate()"
+        >
+          <input type="hidden" formControlName="id" />
+          <h3 class="h5 text-secondary">{{ "Hungarian" | translate }}*</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="hungarianQuestion"
+                  required
+                />
+              </div>
+              @if (
+                questionForm.get("hungarianQuestion")?.invalid &&
+                questionForm.get("hungarianQuestion")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "hungarianValid" | translate }}
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{'english'|translate}} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="englishQuestion" required>
-							</div>
-							<div *ngIf="questionForm.get('englishQuestion')?.invalid && questionForm.get('englishQuestion')?.touched"
-								class="alert alert-danger" role="alert">
-								{{'englishValid'|translate}}
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">{{ "english" | translate }} *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="englishQuestion"
+                  required
+                />
+              </div>
+              @if (
+                questionForm.get("englishQuestion")?.invalid &&
+                questionForm.get("englishQuestion")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "englishValid" | translate }}
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{'hungarianAnswer'|translate}} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="hungarianAnswer" required>
-							</div>
-							<div *ngIf="questionForm.get('hungarianAnswer')?.invalid && questionForm.get('hungarianAnswer')?.touched"
-								class="alert alert-danger" role="alert">
-								{{'hungarianAnswerValid'|translate}}
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">
+            {{ "hungarianAnswer" | translate }} *
+          </h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="hungarianAnswer"
+                  required
+                />
+              </div>
+              @if (
+                questionForm.get("hungarianAnswer")?.invalid &&
+                questionForm.get("hungarianAnswer")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "hungarianAnswerValid" | translate }}
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{'englishAnswer'|translate}} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="englishAnswer" required>
-							</div>
-							<div *ngIf="questionForm.get('englishAnswer')?.invalid && questionForm.get('englishAnswer')?.touched"
-								class="alert alert-danger" role="alert">
-								{{'englishAnswerValid'|translate}}
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">{{ "englishAnswer" | translate }} *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="englishAnswer"
+                  required
+                />
+              </div>
+              @if (
+                questionForm.get("englishAnswer")?.invalid &&
+                questionForm.get("englishAnswer")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "englishAnswerValid" | translate }}
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{'descriptionHungarian'|translate}} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="descriptionHungarian">
-							</div>
-							<div
-								*ngIf="questionForm.get('descriptionHungarian')?.invalid && questionForm.get('descriptionHungarian')?.touched"
-								class="alert alert-danger" role="alert">
-								{{'descriptionHungarianValid'|translate}}
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">
+            {{ "descriptionHungarian" | translate }} *
+          </h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="descriptionHungarian"
+                />
+              </div>
+              @if (
+                questionForm.get("descriptionHungarian")?.invalid &&
+                questionForm.get("descriptionHungarian")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "descriptionHungarianValid" | translate }}
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">{{'descriptionEnglish'|translate}} *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" formControlName="descriptionEnglish">
-							</div>
-							<div
-								*ngIf="questionForm.get('descriptionEnglish')?.invalid && questionForm.get('descriptionEnglish')?.touched"
-								class="alert alert-danger" role="alert">
-								{{'descriptionEnglishValid'|translate}}
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">
+            {{ "descriptionEnglish" | translate }} *
+          </h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="descriptionEnglish"
+                />
+              </div>
+              @if (
+                questionForm.get("descriptionEnglish")?.invalid &&
+                questionForm.get("descriptionEnglish")?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  {{ "descriptionEnglishValid" | translate }}
+                </div>
+              }
+            </div>
+          </div>
 
-					<button [disabled]="questionForm.invalid" type="submit" class="btn btn-primary pull-right me-md-3">
-						{{ actionText }}
-					</button>
-					<button routerLink="/question" type="button"
-						class="btn btn-danger pull-left">{{'cancelEdit'|translate}}</button>
-					<div class="clearfix"></div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4"></div>
+          <button
+            [disabled]="questionForm.invalid"
+            type="submit"
+            class="btn btn-primary pull-right me-md-3"
+          >
+            {{ actionText }}
+          </button>
+          <button
+            routerLink="/question"
+            type="button"
+            class="btn btn-danger pull-left"
+          >
+            {{ "cancelEdit" | translate }}
+          </button>
+          <div class="clearfix"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
 </div>

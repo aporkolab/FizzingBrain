@@ -79,7 +79,14 @@
     "Login": "Bejelentkezés",
     "Logout": "Kijelentkezés",
     "ANSWER": "A helyes válasz",
-    "FIZZINGBRAIN_TITLE": "FizzingBrain v.1.0.0."
+    "FIZZINGBRAIN_TITLE": "FizzingBrain v.1.0.0.",
+    "CHOSEN_DIFFICULTY": "A számítógép ezt a nehézségi szintet választotta neked:",
+    "WINNER_BOTH": "mindkét játékos",
+    "WINNER_COMPUTER": "Számítógép",
+    "WINNER_PLAYER": "Játékos",
+    "NOQUESTIONS": "Nem sikerült betölteni a kérdéseket. Kérlek, próbáld újra később!",
+    "QUESTIONERROR": "Az aktuális kérdést nem sikerült betölteni.",
+    "INVALIDANSWER": "A kérdésre adott válasz nem szám."
   },
   "HEADBAR": {
     "SELECT": "Válassza ki az alkalmazás nyelvét!"
@@ -110,13 +117,13 @@
     "design": "Tooplate"
   },
   "contact": {
-  "header": "Érj el, több platformon is",
-  "name": "Dr. Porkoláb Ádám",
-  "links": {
-    "mind": "Merülj el az IT-világomban",
-    "domain": "Barangolj a portfóliómban",
-    "creations": "Fejtsd meg az alkotásaimat",
-    "ping": "Vedd fel velem a kapcsolatot"
+    "header": "Érj el, több platformon is",
+    "name": "Dr. Porkoláb Ádám",
+    "links": {
+      "mind": "Merülj el az IT-világomban",
+      "domain": "Barangolj a portfóliómban",
+      "creations": "Fejtsd meg az alkotásaimat",
+      "ping": "Vedd fel velem a kapcsolatot"
     }
   }
 }
