@@ -1,9 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/model/user';
 import { FilterPipe } from 'src/app/pipe/filter.pipe';
@@ -25,14 +32,17 @@ export interface INgxTableColumn {
     CommonModule, // ngIf, ngFor
     FormsModule, // ngModel
     RouterModule, // routerLink
-    TranslatePipe, // | translate
     FilterPipe,
     SorterPipe,
   ],
 })
-export class NgxDataTableComponent<T extends { [key: string]: any }>
-  implements OnInit
-{
+export class NgxDataTableComponent<
+  T extends { [key: string]: any },
+> implements OnInit {
+  private notifyService = inject(NotificationService);
+  auth = inject(AuthService);
+  router = inject(Router);
+
   @Input() list: T[] = [];
   @Input() columns: INgxTableColumn[] = [];
   @Input() entity: string = '';
@@ -62,18 +72,16 @@ export class NgxDataTableComponent<T extends { [key: string]: any }>
   user$: BehaviorSubject<User | null>;
   private readonly destroyRef = inject(DestroyRef);
 
-  constructor(
-    private notifyService: NotificationService,
-    public auth: AuthService,
-    public router: Router,
-  ) {
+  constructor() {
     this.user$ = this.auth.user$;
   }
 
   ngOnInit(): void {
-    this.auth.user$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
-      this.isLoggedIn = !!user;
-    });
+    this.auth.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => {
+        this.isLoggedIn = !!user;
+      });
   }
 
   onSelect(entity: T): void {

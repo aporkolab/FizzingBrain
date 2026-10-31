@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -17,22 +16,20 @@ import { UserService } from 'src/app/service/user.service';
   standalone: true,
   selector: 'app-users-editor',
   templateUrl: './users-editor.component.html',
-  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, RouterModule],
+  imports: [ReactiveFormsModule, TranslatePipe, RouterModule],
 })
 export class UsersEditorComponent implements OnInit {
+  private userService = inject(UserService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notifyService = inject(NotificationService);
+  private translate = inject(TranslateService);
+  private fb = inject(FormBuilder);
+
   user$!: Observable<User>;
   userForm!: FormGroup;
   entity = 'User';
   actionText!: string;
-
-  constructor(
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifyService: NotificationService,
-    private translate: TranslateService,
-    private fb: FormBuilder,
-  ) {}
 
   ngOnInit(): void {
     this.initForm();

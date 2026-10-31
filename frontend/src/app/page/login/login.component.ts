@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService, ILoginData } from 'src/app/service/auth.service';
@@ -8,12 +7,12 @@ import { AuthService, ILoginData } from 'src/app/service/auth.service';
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [CommonModule, FormsModule, TranslatePipe],
+  imports: [FormsModule, TranslatePipe],
 })
 export class LoginComponent implements OnInit {
-  loginData: ILoginData = { email: '', password: '' };
+  private auth = inject(AuthService);
 
-  constructor(private auth: AuthService) {}
+  loginData: ILoginData = { email: '', password: '' };
 
   ngOnInit(): void {
     this.auth.logout();

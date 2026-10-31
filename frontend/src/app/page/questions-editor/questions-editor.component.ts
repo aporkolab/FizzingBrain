@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -17,22 +16,20 @@ import { QuestionService } from 'src/app/service/question.service';
   standalone: true,
   selector: 'app-questions-editor',
   templateUrl: './questions-editor.component.html',
-  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, RouterModule],
+  imports: [ReactiveFormsModule, TranslatePipe, RouterModule],
 })
 export class QuestionsEditorComponent implements OnInit {
+  private questionService = inject(QuestionService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notifyService = inject(NotificationService);
+  private translate = inject(TranslateService);
+  private fb = inject(FormBuilder);
+
   question$!: Observable<Question>;
   questionForm!: FormGroup;
   entity = 'Question';
   actionText!: string;
-
-  constructor(
-    private questionService: QuestionService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifyService: NotificationService,
-    private translate: TranslateService,
-    private fb: FormBuilder,
-  ) {}
 
   ngOnInit(): void {
     this.initForm();

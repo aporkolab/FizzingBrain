@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
 import { DataTableModule } from 'src/app/common/data-table/data-table.module';
 import { User } from 'src/app/model/user';
 import { ConfigService } from 'src/app/service/config.service';
@@ -12,21 +11,17 @@ import { UserService } from 'src/app/service/user.service';
   standalone: true,
   selector: 'app-users',
   templateUrl: './users.component.html',
-  imports: [CommonModule, DataTableModule, TranslatePipe],
+  imports: [CommonModule, DataTableModule],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
+  private config = inject(ConfigService);
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private notifyService = inject(NotificationService);
+
   columns = this.config.usersColumn;
   list$ = this.userService.getAll();
   entity: string = 'User';
-
-  constructor(
-    private config: ConfigService,
-    private userService: UserService,
-    private router: Router,
-    private notifyService: NotificationService,
-  ) {}
-
-  ngOnInit(): void {}
 
   showSuccessDelete() {
     this.notifyService.showSuccess(
