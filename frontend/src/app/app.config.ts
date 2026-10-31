@@ -3,6 +3,7 @@ import {
   ApplicationConfig,
   inject,
   provideAppInitializer,
+  provideZoneChangeDetection,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
@@ -23,6 +24,8 @@ export function initTranslations(translate: TranslateService): Promise<unknown> 
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // Timer and HTTP callbacks still update plain component fields during this migration.
+    provideZoneChangeDetection(),
     provideHttpClient(withInterceptors([jwtInterceptor])),
     provideAnimations(),
     provideRouter(routes),
