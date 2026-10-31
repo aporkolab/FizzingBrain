@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/model/user';
 import { FilterPipe } from 'src/app/pipe/filter.pipe';
@@ -24,7 +25,7 @@ export interface INgxTableColumn {
     CommonModule, // ngIf, ngFor
     FormsModule, // ngModel
     RouterModule, // routerLink
-    TranslateModule, // | translate
+    TranslatePipe, // | translate
     FilterPipe,
     SorterPipe,
   ],
@@ -59,6 +60,7 @@ export class NgxDataTableComponent<T extends { [key: string]: any }>
   sortDir = -1;
 
   user$: BehaviorSubject<User | null>;
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(
     private notifyService: NotificationService,
@@ -69,9 +71,8 @@ export class NgxDataTableComponent<T extends { [key: string]: any }>
   }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe((user) => {
+    this.auth.user$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
       this.isLoggedIn = !!user;
-      // console.log('isLoggedIn:', this.isLoggedIn);
     });
   }
 

@@ -29,9 +29,6 @@ export class HeadbarComponent implements OnInit {
     protected data: FizzingbrainService,
     private auth: AuthService,
   ) {
-    this.user$.subscribe((user) => {
-      console.log('User observable changed:', user);
-    });
     this.translate.addLangs(['hu', 'en']);
   }
 
@@ -48,7 +45,6 @@ export class HeadbarComponent implements OnInit {
   }
 
   logout() {
-    console.log('Logging out...');
     this.auth.logout();
   }
 

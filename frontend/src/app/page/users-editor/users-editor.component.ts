@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/model/user';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -17,7 +17,7 @@ import { UserService } from 'src/app/service/user.service';
   standalone: true,
   selector: 'app-users-editor',
   templateUrl: './users-editor.component.html',
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, RouterModule],
 })
 export class UsersEditorComponent implements OnInit {
   user$!: Observable<User>;
@@ -36,23 +36,21 @@ export class UsersEditorComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    console.log('Form initialized:', this.userForm);
     this.route.params.subscribe({
       next: (param) => {
         if (param['id'] === '0') {
           this.userForm.reset(new User());
           this.actionText = this.translate.instant('createUser');
           this.addPasswordValidators();
-          console.log('Form reset for new user:', this.userForm);
         } else {
           this.user$ = this.userService.getOne(param['id']);
           this.user$.subscribe({
             next: (user) => {
               if (user) {
-                this.userForm.patchValue(user);
+                // Never echo a stored password (hash) back into the form.
+                this.userForm.patchValue({ ...user, password: '' });
                 this.actionText = this.translate.instant('updateUser');
                 this.removePasswordValidators();
-                console.log('Form patched with existing user:', this.userForm);
               }
             },
           });
@@ -87,17 +85,6 @@ export class UsersEditorComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('Form submitted:', this.userForm);
-    console.log('Form status:', this.userForm.status);
-    console.log('Form errors:', this.userForm.errors);
-
-    for (const control in this.userForm.controls) {
-      if (this.userForm.controls.hasOwnProperty(control)) {
-        console.log(`${control} validity:`, this.userForm.get(control)?.valid);
-        console.log(`${control} errors:`, this.userForm.get(control)?.errors);
-      }
-    }
-
     if (this.userForm.valid) {
       if (this.userForm.get('id')?.value) {
         this.onUpdate();
@@ -105,7 +92,6 @@ export class UsersEditorComponent implements OnInit {
         this.onCreate();
       }
     } else {
-      console.log('Form is invalid:', this.userForm);
     }
   }
 
