@@ -9,10 +9,143 @@ servers:
     description: Development server
 
 paths:
+  /login:
+    post:
+      summary: Log in and receive a JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Successful login.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  accessToken:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: E-mail or password missing.
+        '401':
+          description: Invalid credentials.
+
+  /question/rand:
+    get:
+      summary: Retrieve a random pack of six questions for a game
+      responses:
+        '200':
+          description: The questions of a game.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+        '404':
+          description: The question bank is empty.
+
+  /question:
+    get:
+      summary: List questions, optionally filtered by any column (LIKE match)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of questions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+        '401':
+          description: Unauthorized
+    post:
+      summary: Create a question
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '201':
+          description: The created question.
+        '400':
+          description: Validation error.
+        '401':
+          description: Unauthorized
+
+  /question/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Retrieve one question
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The question.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    patch:
+      summary: Update a question
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The updated question.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    put:
+      summary: Update a question
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The updated question.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    delete:
+      summary: Delete a question
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Deleted.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+
   /user:
     get:
       summary: Retrieve a list of users
-      description: Returns a list of all registered users.
+      description: Returns a list of all registered users. Password hashes are never returned.
       security:
         - bearerAuth: []
       responses:
@@ -26,34 +159,132 @@ paths:
                   $ref: '#/components/schemas/User'
         '401':
           description: Unauthorized
+    post:
+      summary: Create a user
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: The created user.
+        '400':
+          description: Validation error (e.g. duplicate e-mail).
+        '401':
+          description: Unauthorized
+
+  /user/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Retrieve one user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The user.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    patch:
+      summary: Update a user (an empty password keeps the current one)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: The updated user.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    put:
+      summary: Update a user (same as PATCH)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The updated user.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    delete:
+      summary: Delete a user
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Deleted.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
 
 components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
   schemas:
     User:
       type: object
       properties:
         id:
           type: integer
-          description: The user ID.
           example: 1
-        name:
-          type: string
-          description: The user's name.
-          example: John Doe
         email:
           type: string
-          description: The user's email address.
           example: john.doe@example.com
-        role:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+
+    UserInput:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            password:
+              type: string
+              format: password
+
+    Question:
+      type: object
+      properties:
+        id:
           type: integer
-          description: The user's role (0 for user, 1 for admin).
-          example: 0
-        createdAt:
+          example: 1
+        hungarianQuestion:
           type: string
-          format: date-time
-        updatedAt:
+        englishQuestion:
           type: string
-          format: date-time
+        hungarianAnswer:
+          type: string
+          example: '1953'
+        englishAnswer:
+          type: string
+          example: '1953'
+        descriptionHungarian:
+          type: string
+        descriptionEnglish:
+          type: string
 
   securitySchemes:
     bearerAuth:

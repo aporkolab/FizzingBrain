@@ -47,8 +47,15 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	User.prototype.validPassword = async function (password) {
-		return await bcrypt.compare(password, this.password);
-	}
+		return bcrypt.compare(password, this.password);
+	};
+
+	// The password hash must never leave the server in an API response.
+	User.prototype.toJSON = function () {
+		const values = { ...this.get() };
+		delete values.password;
+		return values;
+	};
 
 	return User;
 };

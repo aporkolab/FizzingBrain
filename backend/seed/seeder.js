@@ -3,8 +3,6 @@ const path = require('path');
 const db = require('../model/index');
 const User = db.User;
 const Question = db.Question;
-const bcrypt = require('bcrypt');
-const userData = require('./user.json');
 
 const sqlUploader = async (model, fileName) => {
 	try {
@@ -43,8 +41,10 @@ async function seedDatabase() {
 		await User.destroy({ where: {}, truncate: true });
 		console.log('All existing User records have been deleted.');
 
-		// Adatok feltöltése
-		await sqlUploader(Question, 'question');
+		// Adatok feltöltése; a kérdéseket csak üres táblába töltjük, különben minden indításkor duplikálódnának.
+		if (await Question.count() === 0) {
+			await sqlUploader(Question, 'question');
+		}
 		await sqlUploader(User, 'user');
 
 		console.log("Every file has been processed by the seeder!");

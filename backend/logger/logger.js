@@ -5,7 +5,8 @@ const {
 } = require('winston');
 
 const logger = createLogger({
-	level: 'info',
+	level: process.env.LOG_LEVEL || 'info',
+	silent: process.env.NODE_ENV === 'test',
 	format: format.combine(
 		format.timestamp(),
 		format.json()

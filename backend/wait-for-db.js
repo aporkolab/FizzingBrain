@@ -1,4 +1,4 @@
-require('dotenv').config();
+const config = require('./config');
 const logger = require('./logger/logger');
 const mysql = require('mysql2/promise');
 const seedDatabase = require('./seed/seeder');
@@ -12,9 +12,11 @@ const dbConfig = {
   port: process.env.DB_PORT || 3306
 };
 
-const port = process.env.PORT || 3000;
+const port = config.port;
 
 async function checkDatabaseConnection() {
+  config.assertRuntimeConfig();
+
   let retries = 5;
   while (retries) {
     try {
@@ -22,8 +24,10 @@ async function checkDatabaseConnection() {
       await connection.end();
       logger.info('Database connection established.');
 
-      // Ha az adatbázis kapcsolat sikeres, feltöltjük az adatokat.
-      await seedDatabase();
+      // A seeder csak kifejezett kérésre fut (SEED_DATABASE=true), mert törli a felhasználókat.
+      if (config.seedDatabase) {
+        await seedDatabase();
+      }
 
       // Indítjuk az alkalmazást, miután a seedelés befejeződött.
       app.listen(port, () => {
