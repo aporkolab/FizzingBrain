@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { DataTableModule } from 'src/app/common/data-table/data-table.module';
 import { User } from 'src/app/model/user';
 import { ConfigService } from 'src/app/service/config.service';
@@ -12,7 +12,7 @@ import { UserService } from 'src/app/service/user.service';
   standalone: true,
   selector: 'app-users',
   templateUrl: './users.component.html',
-  imports: [CommonModule, DataTableModule, TranslateModule],
+  imports: [CommonModule, DataTableModule, TranslatePipe],
 })
 export class UsersComponent implements OnInit {
   columns = this.config.usersColumn;

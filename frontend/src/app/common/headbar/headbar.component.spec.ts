@@ -1,3 +1,4 @@
+import { provideTestDefaults } from 'src/testing/test-providers';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeadbarComponent } from './headbar.component';
@@ -8,7 +9,8 @@ describe('HeadbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeadbarComponent ]
+      imports: [HeadbarComponent],
+      providers: provideTestDefaults()
     })
     .compileComponents();
 

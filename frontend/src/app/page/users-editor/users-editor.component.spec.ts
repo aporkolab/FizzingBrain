@@ -1,3 +1,4 @@
+import { provideTestDefaults } from 'src/testing/test-providers';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UsersEditorComponent } from './users-editor.component';
@@ -8,7 +9,8 @@ describe('UsersEditorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UsersEditorComponent ]
+      imports: [UsersEditorComponent],
+      providers: provideTestDefaults()
     })
     .compileComponents();
 

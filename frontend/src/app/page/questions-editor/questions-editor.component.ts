@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { Question } from 'src/app/model/question';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -17,7 +17,7 @@ import { QuestionService } from 'src/app/service/question.service';
   standalone: true,
   selector: 'app-questions-editor',
   templateUrl: './questions-editor.component.html',
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe, RouterModule],
 })
 export class QuestionsEditorComponent implements OnInit {
   question$!: Observable<Question>;

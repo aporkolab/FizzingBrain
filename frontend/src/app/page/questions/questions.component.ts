@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { DataTableModule } from 'src/app/common/data-table/data-table.module';
 import { Question } from 'src/app/model/question';
 import { ConfigService } from 'src/app/service/config.service';
@@ -12,7 +12,7 @@ import { QuestionService } from 'src/app/service/question.service';
   standalone: true,
   selector: 'app-questions',
   templateUrl: './questions.component.html',
-  imports: [CommonModule, DataTableModule, TranslateModule],
+  imports: [CommonModule, DataTableModule, TranslatePipe],
 })
 export class QuestionsComponent implements OnInit {
   columns = this.config.questionsColumn;
