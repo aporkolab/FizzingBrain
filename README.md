@@ -41,7 +41,7 @@ Before running the program, the file 'backend/SQL database scripts/fkbpanik_fizz
 
 If the data tables are not created, the backend of the program will not work.
 
-_If you're lazy, you can also avoid using the built-in seeder (it's disabled by default in the program) by importing the "fkbpanik_fizzingbrain_withdata.sql" file._
+_If you're lazy, import the "fkbpanik_fizzingbrain_withdata.sql" file, or start the backend once with `SEED_DATABASE=true`: the built-in seeder (disabled by default) creates the tables and loads the sample questions and users. **Warning:** the seeder deletes every existing user._
 
 **The choice is yours, but it is important to import _ONE_ of the files from the 'SQL database scripts' folder.**
 
@@ -49,21 +49,21 @@ _If you're lazy, you can also avoid using the built-in seeder (it's disabled by 
 
 **The application excludes the file _.env_**, which contains the database connection data. **If you clone this project, the ._env file needs to be added and properly filled a the root of your backend_.**
 
-The contents of the file are as follows, please use proper data of your database :
+Copy `backend/.env.example` to `backend/.env` and fill it with the proper data of your database:
 
-> DB_HOST=localhost
->
-> DB_USER=yourUsername
->
-> DB_PASSWORD=yourPassword
->
-> DB_NAME=yourDatabaseName
->
-> PORT=3003 or whatever your want (apart from 3306, which is reserved for database engines.)
+| Variable | Required | Description |
+| --- | --- | --- |
+| `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | yes (`DB_PORT` defaults to 3306) | MySQL/MariaDB connection |
+| `JWT_SECRET` | yes | Long random string used to sign the login tokens. The backend refuses to start without it. |
+| `JWT_EXPIRES_IN` | no | Token lifetime, default `1h` |
+| `PORT` | no | HTTP port of the backend, default `3000` (apart from 3306, which is reserved for database engines) |
+| `CORS_ORIGIN` | no | Comma separated list of allowed origins, e.g. `https://fizzingbrain.aporkolab.com`. Empty or `*` allows every origin. |
+| `SEED_DATABASE` | no | `true` runs the seeder on start-up (see 2.1) |
+| `LOG_LEVEL` | no | winston log level, default `info` |
 
 ## **3. Version history**
 
-Technologies used: Angular 18 and Bootstrap 5. The project is undergoing a senior-level refactor to improve code quality, remove legacy dependencies like jQuery, and establish a modern, testable architecture. For an exact list of dependencies, see the `package.json` files.
+Technologies used: Angular 22 (standalone components, esbuild application builder, Vitest unit tests), ngx-translate 18 and Bootstrap 5 on the frontend; Node.js with Express 5, Sequelize 6 (MySQL/MariaDB), JWT authentication and Jest/Supertest tests on the backend. Supported Node.js versions: 22.22+, 24.15+ or 26+. For an exact list of dependencies, see the `package.json` files.
 
 ### v.1.0.0 (2022-11-11)
 
@@ -95,28 +95,29 @@ Technologies used: Angular 18 and Bootstrap 5. The project is undergoing a senio
 
       - On the terminal, go to the /frontend folder and run `npm i`.\*
 
-7.1. For manual installation:
+7.  Build the frontend:
 
-- In the terminal, issue the `ng build` command.
-- The contents of the /frontend/dist/frontend folder must be copied to the /backend/public folder.
+- In the /frontend folder, issue the `npm run build` command.
+- To serve the frontend from the backend, copy the contents of the /frontend/dist/fizzing-brain folder to the /backend/public folder.
 
-OR
+8.  Run the tests:
 
-7.2. For automatic installation:
-
-- In the terminal, go to the /backend folder and run the `npm run build` command.
-- It is important to install using only one of the methods.
+- Backend: in the /backend folder, run `npm test` (Jest + Supertest, no database needed).
+- Frontend: in the /frontend folder, run `npm test` (Vitest through the Angular CLI).
 
 ## **5. Configure the application**
 
 - In the _/frontend/environments_ folder, configure the API endpoint path:
 
-  - _environment.ts_ file: [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
-  - _environment.prod.ts_ file: [http://localhost:3000/](http://localhost:3000/)
+  - _environment.ts_ file (development): `http://localhost:3000`
+  - _environment.prod.ts_ file (production build): `https://api.fizzingbrain.porkolab.hu`
 
 ## **6. Start the application**
 
-- Both the backend and the frontend can be started with the `npm start` command.
+- Both the backend and the frontend can be started with the `npm start` command. The backend waits for the database and then listens on `PORT`; the frontend `npm start` serves the production build from `dist/fizzing-brain`.
+- For frontend development use `npx ng serve` (http://localhost:4200).
+- The API documentation is available at `/api-docs` on the backend.
+- The question and user editors (`/question`, `/user`) require login.
 
 ## **7. A special thanks to...**
 
@@ -173,7 +174,7 @@ A program futtatása előtt a 'backend/SQL adatbázis szkriptek/fkbpanik_fizzing
 
 Ha az adattáblák nincsenek létrehozva, a program backendje nem fog működni.
 
-_Ha lusta vagy, akkor a "fkbpanik_fizzingbrain_withdata.sql" fájl importálásával elkerülheted a beépített seedert is (alapértelmezetten ki van kapcsolva a programban)._
+_Ha lusta vagy, importáld a "fkbpanik_fizzingbrain_withdata.sql" fájlt, vagy indítsd el egyszer a backendet `SEED_DATABASE=true` beállítással: a beépített seeder (alapértelmezetten ki van kapcsolva) létrehozza a táblákat és betölti a minta kérdéseket és felhasználókat. **Figyelem:** a seeder minden meglévő felhasználót töröl._
 
 **A választás a tiéd, de fontos, hogy az "SQL adatbázis szkriptek" mappából _egyetlen_ fájlt importálj.**
 
@@ -181,21 +182,21 @@ _Ha lusta vagy, akkor a "fkbpanik_fizzingbrain_withdata.sql" fájl importálás�
 
 **Az alkalmazás nem tartalmazza az _.env_** fájlt, amely az adatbázis-kapcsolati adatokat tartalmazza. **Ha klónozod ezt a projektet, a ._env fájlt hozzá kell adni és megfelelően ki kell tölteni a backend mappa gyökerébe_.**
 
-A fájl tartalma a következő, kérlek, használd a saját adatbázisod megfelelő adatait :
+Másold le a `backend/.env.example` fájlt `backend/.env` néven, és töltsd ki a saját adatbázisod megfelelő adataival:
 
-> DB_HOST=localhost
->
-> DB_USER=yourUsername
->
-> DB_PASSWORD=yourPassword
->
-> DB_NAME=yourDatabaseName
->
-> PORT=3003 vagy amit csak akarsz (kivéve a 3306-ot, amely az adatbázis-motorok számára van fenntartva).
+| Változó | Kötelező | Leírás |
+| --- | --- | --- |
+| `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | igen (a `DB_PORT` alapértéke 3306) | MySQL/MariaDB kapcsolat |
+| `JWT_SECRET` | igen | Hosszú, véletlenszerű szöveg a bejelentkezési tokenek aláírásához. Nélküle a backend el sem indul. |
+| `JWT_EXPIRES_IN` | nem | A token élettartama, alapértéke `1h` |
+| `PORT` | nem | A backend HTTP portja, alapértéke `3000` (kivéve a 3306-ot, amely az adatbázis-motorok számára van fenntartva) |
+| `CORS_ORIGIN` | nem | Az engedélyezett originek vesszővel elválasztva, pl. `https://fizzingbrain.aporkolab.com`. Üresen vagy `*` értékkel mindent enged. |
+| `SEED_DATABASE` | nem | `true` esetén induláskor lefut a seeder (lásd 2.1) |
+| `LOG_LEVEL` | nem | A winston naplózási szintje, alapértéke `info` |
 
 ## **3. Version history**
 
-Alkalmazott technológiák: Angular 18 és Bootstrap 5. A projekt egy senior szintű refaktoráláson megy keresztül a kódminőség javítása, az elavult függőségek (mint a jQuery) eltávolítása és egy modern, tesztelhető architektúra kialakítása érdekében. A pontos függőségi listáért lásd a `package.json` fájlokat.
+Alkalmazott technológiák: a frontenden Angular 22 (standalone komponensek, esbuild application builder, Vitest unit tesztek), ngx-translate 18 és Bootstrap 5; a backenden Node.js, Express 5, Sequelize 6 (MySQL/MariaDB), JWT autentikáció és Jest/Supertest tesztek. Támogatott Node.js verziók: 22.22+, 24.15+ vagy 26+. A pontos függőségi listáért lásd a `package.json` fájlokat.
 
 ### v.1.0.0 (2022-11-11)
 
@@ -216,7 +217,7 @@ Alkalmazott technológiák: Angular 18 és Bootstrap 5. A projekt egy senior szi
 
 4. Le kell klónozni az adott GitHub repository tartalmát. Tehát a PowerShell-ben a következő parancsot kell kiadni:
 
-   `git clone https://github.com/APorkolab/Nyelvszo-v.2.0.git`
+   `git clone https://github.com/APorkolab/FizzingBrain.git`
 
 5. Telepíteni kell az alkalmazás függőségeit:
 
@@ -227,33 +228,29 @@ Alkalmazott technológiák: Angular 18 és Bootstrap 5. A projekt egy senior szi
    - Frontend
      - A terminálon be kell lépni a /frontend mappába és futtatni az `npm i` parancsot.
 
-6.1. Manuális telepítés esetén:
+6. A frontend buildelése:
 
-- A terminálban ki kell adni az `ng build` parancsot.
+- A /frontend mappában ki kell adni az `npm run build` parancsot.
+- Ha a backend szolgálja ki a frontendet, a /frontend/dist/fizzing-brain mappa tartalmát be kell másolni a /backend/public mappába.
 
-- A /frontend/dist/frontend mappa tartalmát be kell másolni a /backend/public mappába.
+7. A tesztek futtatása:
 
-VAGY
-
-6.2. Automatikus telepítés esetén:
-
-- A terminálon be kell lépni a /backend mappába és futtatni az `npm run build` parancsot.
-- Fontos, hogy csak az egyik módszer szerint kell telepíteni.
+- Backend: a /backend mappában `npm test` (Jest + Supertest, adatbázis nem kell hozzá).
+- Frontend: a /frontend mappában `npm test` (Vitest az Angular CLI-n keresztül).
 
 ## **4. Az alkalmazás konfigurálása**
 
 - A _/frontend/environments_ mappában be kell állítani az API végpont elérési útvonalát:
 
-  - _environment.ts_ állomány: http://127.0.0.1:3000/
-  - _environment.prod.ts_ állomány: http://localhost:3000/
+  - _environment.ts_ állomány (fejlesztés): `http://localhost:3000`
+  - _environment.prod.ts_ állomány (éles build): `https://api.fizzingbrain.porkolab.hu`
 
 ## **5. Az alkalmazás indítása**
 
-- Mind a backend, mind a frontend az `npm start` paranccsal indítható.
-
-## **6. Az alkalmazás elindítása**
-
-- Mind a backend, mind a frontend az `npm start` paranccsal indítható.
+- Mind a backend, mind a frontend az `npm start` paranccsal indítható. A backend megvárja az adatbázist, majd a `PORT`-on figyel; a frontend `npm start` a `dist/fizzing-brain` éles buildet szolgálja ki.
+- Frontend fejlesztéshez: `npx ng serve` (http://localhost:4200).
+- Az API dokumentáció a backend `/api-docs` útvonalán érhető el.
+- A kérdés- és felhasználószerkesztő (`/question`, `/user`) bejelentkezést igényel.
 
 ## **7. Külön köszönöm...**
 
